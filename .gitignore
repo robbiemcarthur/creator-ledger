@@ -1,6 +1,7 @@
 # Gradle
 .gradle/
 build/
+lib/
 !gradle/wrapper/gradle-wrapper.jar
 
 # Eclipse
@@ -42,3 +43,6 @@ test-results/
 
 # Environment variables
 .env
+
+# SSH keys
+*.pem

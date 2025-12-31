@@ -102,7 +102,7 @@ Each module follows the same structure:
 
 # 8. Technology Stack
 
-- Java 25
+- Java 21
 - Spring Boot 4.x
 - Spring Modulith 2.x
 - Spock Framework

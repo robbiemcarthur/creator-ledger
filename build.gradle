@@ -1,17 +1,17 @@
 plugins {
     id 'java'
+    id 'groovy'
     id 'org.springframework.boot' version '4.0.1'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
-group = 'org.robbiemcarthur'
+group = 'org.creatorledger'
 version = '0.0.1-SNAPSHOT'
 description = 'creator-ledger'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+    sourceCompatibility = '21'
+    targetCompatibility = '21'
 }
 
 repositories {
@@ -19,12 +19,17 @@ repositories {
 }
 
 ext {
+    groovyVersion = '4.0.23'
     spockVersion = '2.4-M4-groovy-4.0'
     testcontainersVersion = '1.20.2'
     springModulithVersion = '1.2.4'
 }
 
 dependencies {
+    // Force Groovy 4.0.x for Spock compatibility
+    implementation "org.apache.groovy:groovy:${groovyVersion}"
+    testImplementation "org.apache.groovy:groovy:${groovyVersion}"
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -34,9 +39,10 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation "org.spockframework:spock-core:${spockVersion}"
     testImplementation "org.spockframework:spock-spring:${spockVersion}"
-    testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
+    testImplementation "org.testcontainers:spock:${testcontainersVersion}"
     testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
     testImplementation "org.springframework.modulith:spring-modulith-starter-test:${springModulithVersion}"
 }
