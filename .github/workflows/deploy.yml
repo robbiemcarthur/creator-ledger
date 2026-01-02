@@ -105,21 +105,40 @@ jobs:
             echo "Waiting for application to be healthy..."
             RETRY_COUNT=0
             MAX_RETRIES=60
-            until docker compose -f docker-compose.external-db.yml exec -T app wget --spider -q http://localhost:8080/actuator/health 2>/dev/null; do
-              RETRY_COUNT=$((RETRY_COUNT+1))
-              if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-                echo "ERROR: Health check failed after $MAX_RETRIES attempts!"
-                echo ""
-                echo "Final container status:"
+
+            while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+              # Check if container is still running
+              if ! docker ps | grep -q creator-ledger-app; then
+                echo "ERROR: Container stopped running!"
+                echo "Container status:"
                 docker ps -a | grep creator-ledger-app
                 echo ""
-                echo "Full container logs:"
+                echo "Container logs:"
                 docker logs creator-ledger-app --tail 100
                 exit 1
               fi
+
+              # Try health check
+              if docker compose -f docker-compose.external-db.yml exec -T app wget --spider -q http://localhost:8080/actuator/health 2>/dev/null; then
+                echo "✅ Application is healthy!"
+                break
+              fi
+
+              RETRY_COUNT=$((RETRY_COUNT+1))
               echo "Waiting for health check... ($RETRY_COUNT/$MAX_RETRIES)"
               sleep 2
             done
+
+            if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+              echo "ERROR: Health check failed after $MAX_RETRIES attempts!"
+              echo ""
+              echo "Final container status:"
+              docker ps -a | grep creator-ledger-app
+              echo ""
+              echo "Full container logs:"
+              docker logs creator-ledger-app --tail 100
+              exit 1
+            fi
 
             echo "Cleaning up old images..."
             docker image prune -f
