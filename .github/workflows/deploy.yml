@@ -32,10 +32,17 @@ jobs:
 
       - name: Deploy to Oracle Cloud
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          DB_URL: ${{ secrets.NEON_DATABASE_URL }}
+          DB_USERNAME: ${{ secrets.NEON_DATABASE_USERNAME }}
+          DB_PASSWORD: ${{ secrets.NEON_DATABASE_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
         with:
           host: ${{ secrets.ORACLE_CLOUD_HOST }}
           username: ${{ secrets.ORACLE_CLOUD_USER }}
           key: ${{ secrets.ORACLE_CLOUD_SSH_KEY }}
+          envs: DB_URL,DB_USERNAME,DB_PASSWORD,GITHUB_TOKEN,GITHUB_ACTOR
           script_stop: true
           script: |
             set -e  # Exit on any error
@@ -52,9 +59,9 @@ jobs:
             SPRING_PROFILES_ACTIVE=prod
 
             # Database Configuration (Neon PostgreSQL)
-            SPRING_DATASOURCE_URL=${{ secrets.NEON_DATABASE_URL }}
-            SPRING_DATASOURCE_USERNAME=${{ secrets.NEON_DATABASE_USERNAME }}
-            SPRING_DATASOURCE_PASSWORD=${{ secrets.NEON_DATABASE_PASSWORD }}
+            SPRING_DATASOURCE_URL=${DB_URL}
+            SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+            SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
 
             # Application Configuration
             APP_PORT=8080
@@ -78,7 +85,7 @@ jobs:
             echo "✅ docker-compose.external-db.yml found"
 
             echo "Logging in to GitHub Container Registry..."
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin || { echo "ERROR: Docker login failed!"; exit 1; }
+            echo ${GITHUB_TOKEN} | docker login ghcr.io -u ${GITHUB_ACTOR} --password-stdin || { echo "ERROR: Docker login failed!"; exit 1; }
 
             echo "Pulling latest image..."
             docker compose -f docker-compose.external-db.yml pull app || { echo "ERROR: Failed to pull image!"; exit 1; }
