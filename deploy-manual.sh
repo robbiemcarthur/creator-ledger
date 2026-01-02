@@ -11,7 +11,7 @@ DEPLOY_DIR="/home/ubuntu/creator-ledger"
 
 # Get latest image tag
 LATEST_TAG=$(git rev-parse --short HEAD)
-IMAGE_NAME="ghcr.io/robbiemcarthur/ledger-creator:master-sha-${LATEST_TAG}"
+IMAGE_NAME="ghcr.io/robbiemcarthur/creator-ledger:master-sha-${LATEST_TAG}"
 
 echo "Deploying image: ${IMAGE_NAME}"
 echo ""

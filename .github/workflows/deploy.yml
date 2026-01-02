@@ -47,7 +47,7 @@ jobs:
             cd /home/ubuntu/creator-ledger
 
             # Create .env file from secrets
-            cat > .env << 'ENVFILE'
+            cat > .env << ENVFILE
             # Spring Profile
             SPRING_PROFILES_ACTIVE=prod
 
@@ -60,8 +60,11 @@ jobs:
             APP_PORT=8080
 
             # Docker Image
-            GITHUB_REPOSITORY=robbiemcarthur/ledger-creator
+            GITHUB_REPOSITORY=robbiemcarthur/creator-ledger
             IMAGE_TAG=latest
+
+            # SSH Action Variables (suppress warnings)
+            DRONE_SSH_PREV_COMMAND_EXIT_CODE=
             ENVFILE
 
             echo "✅ Environment file created"

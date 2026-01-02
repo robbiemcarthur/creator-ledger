@@ -47,7 +47,7 @@ SPRING_DATASOURCE_PASSWORD=${DB_PASS}
 APP_PORT=8080
 
 # Docker Image
-GITHUB_REPOSITORY=robbiemcarthur/ledger-creator
+GITHUB_REPOSITORY=robbiemcarthur/creator-ledger
 IMAGE_TAG=latest
 ENVFILE
 
