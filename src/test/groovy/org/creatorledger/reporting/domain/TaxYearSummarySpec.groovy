@@ -1,8 +1,9 @@
 package org.creatorledger.reporting.domain
 
-import org.creatorledger.common.domain.Money
-import org.creatorledger.expense.domain.ExpenseCategory
-import org.creatorledger.user.domain.UserId
+import org.creatorledger.common.Money
+import org.creatorledger.common.TaxYearSummaryId
+import org.creatorledger.common.UserId
+import org.creatorledger.expense.api.ExpenseCategory
 import spock.lang.Specification
 
 class TaxYearSummarySpec extends Specification {

@@ -1,7 +1,7 @@
 package org.creatorledger.reporting.domain;
 
-import org.creatorledger.common.domain.Money;
-import org.creatorledger.expense.domain.ExpenseCategory;
+import org.creatorledger.common.Money;
+import org.creatorledger.expense.api.ExpenseCategory;
 
 import java.util.Collections;
 import java.util.Map;

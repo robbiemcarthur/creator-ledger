@@ -1,7 +1,8 @@
 package org.creatorledger.reporting.domain;
 
-import org.creatorledger.common.domain.Money;
-import org.creatorledger.user.domain.UserId;
+import org.creatorledger.common.Money;
+import org.creatorledger.common.UserId;
+import org.creatorledger.common.TaxYearSummaryId;
 
 import java.time.Instant;
 

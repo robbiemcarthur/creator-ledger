@@ -1,4 +1,4 @@
-package org.creatorledger.reporting.domain;
+package org.creatorledger.common;
 
 import java.util.UUID;
 

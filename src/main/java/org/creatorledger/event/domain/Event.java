@@ -1,4 +1,5 @@
 package org.creatorledger.event.domain;
+import org.creatorledger.common.EventId;
 
 /**
  * Aggregate root representing a business event (gig, project, client work).

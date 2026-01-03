@@ -1,5 +1,7 @@
 package org.creatorledger.user.domain;
 
+import org.creatorledger.common.UserId;
+
 /**
  * Aggregate root representing a user in the system.
  * Users are identified by their UserId and have an email address.

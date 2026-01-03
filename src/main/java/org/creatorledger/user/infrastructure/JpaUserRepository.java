@@ -2,7 +2,7 @@ package org.creatorledger.user.infrastructure;
 
 import org.creatorledger.user.application.UserRepository;
 import org.creatorledger.user.domain.User;
-import org.creatorledger.user.domain.UserId;
+import org.creatorledger.common.UserId;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

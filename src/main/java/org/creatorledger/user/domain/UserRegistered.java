@@ -1,5 +1,7 @@
 package org.creatorledger.user.domain;
 
+import org.creatorledger.common.UserId;
+
 import java.time.Instant;
 
 /**

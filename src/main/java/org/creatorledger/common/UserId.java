@@ -1,4 +1,4 @@
-package org.creatorledger.user.domain;
+package org.creatorledger.common;
 
 import java.util.UUID;
 

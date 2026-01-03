@@ -1,4 +1,4 @@
-package org.creatorledger.common.domain;
+package org.creatorledger.common;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

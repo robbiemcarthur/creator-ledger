@@ -1,8 +1,9 @@
 package org.creatorledger.income.domain;
 
-import org.creatorledger.common.domain.Money;
-import org.creatorledger.event.domain.EventId;
-import org.creatorledger.user.domain.UserId;
+import org.creatorledger.common.Money;
+import org.creatorledger.common.IncomeId;
+import org.creatorledger.common.EventId;
+import org.creatorledger.common.UserId;
 
 import java.time.Instant;
 import java.time.LocalDate;

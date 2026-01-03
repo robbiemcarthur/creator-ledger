@@ -1,5 +1,7 @@
 package org.creatorledger.event.domain
 
+import org.creatorledger.common.EventId
+import org.creatorledger.common.UserId
 import spock.lang.Specification
 import java.time.Instant
 import java.time.LocalDate

@@ -1,4 +1,4 @@
-package org.creatorledger.common.domain
+package org.creatorledger.common
 
 import spock.lang.Specification
 import java.math.BigDecimal

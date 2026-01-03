@@ -1,7 +1,9 @@
 package org.creatorledger.expense.domain;
 
-import org.creatorledger.common.domain.Money;
-import org.creatorledger.user.domain.UserId;
+import org.creatorledger.common.Money;
+import org.creatorledger.common.ExpenseId;
+import org.creatorledger.common.UserId;
+import org.creatorledger.expense.api.ExpenseCategory;
 
 import java.time.Instant;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package org.creatorledger.expense.domain;
+package org.creatorledger.common;
 
 import java.util.UUID;
 

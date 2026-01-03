@@ -1,5 +1,6 @@
 package org.creatorledger.user.domain
 
+import org.creatorledger.common.UserId
 import spock.lang.Specification
 import java.time.Instant
 

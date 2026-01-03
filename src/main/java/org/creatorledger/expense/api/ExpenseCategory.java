@@ -1,4 +1,4 @@
-package org.creatorledger.expense.domain;
+package org.creatorledger.expense.api;
 
 public enum ExpenseCategory {
     EQUIPMENT,
