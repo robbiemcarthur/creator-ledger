@@ -1,7 +1,18 @@
 # CreatorLedger — Architecture Overview
 
-CreatorLedger is a modular, domain‑driven financial organiser for UK self‑employed creatives.  
+CreatorLedger is a modular, domain‑driven financial organiser for UK self‑employed creatives.
 The system models events, income, expenses, and tax‑year summaries using a **modular monolith** built with **Spring Modulith**, **DDD**, and **event‑driven communication**.
+
+## 📊 Visual Architecture (C4 Diagrams)
+
+Detailed architecture diagrams using the C4 model are available in [docs/architecture/](./docs/architecture/):
+
+- **[System Context](./docs/architecture/01-system-context.md)** - CreatorLedger in its environment with users and external systems
+- **[Container](./docs/architecture/02-container.md)** - Modular monolith architecture with 6 bounded contexts
+- **[Component - User Module](./docs/architecture/03-component-user.md)** - User module hexagonal architecture (fully implemented)
+- **[Component Template](./docs/architecture/03-component-TEMPLATE.md)** - Template for documenting other modules
+
+All diagrams use **Mermaid** syntax and render automatically in GitHub, VS Code, and IntelliJ IDEA.
 
 ---
 
