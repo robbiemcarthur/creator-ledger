@@ -3,6 +3,7 @@ package org.creatorledger.income.application;
 import org.creatorledger.income.domain.Income;
 import org.creatorledger.income.api.IncomeId;
 import org.creatorledger.common.Money;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import java.util.Optional;
  * for business logic and the repository for persistence.
  * </p>
  */
+@Service
 public class IncomeApplicationService {
 
     private final IncomeRepository incomeRepository;
