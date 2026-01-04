@@ -13,7 +13,27 @@
         <Class name="~.*Spec$"/>
     </Match>
 
-    <!-- Exclude records - they have immutable fields by design -->
+    <!-- Application service constructors: dependency injection by design -->
+    <Match>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+        <Class name="~.*ApplicationService$"/>
+        <Method name="&lt;init&gt;"/>
+    </Match>
+
+    <!-- Application service constructors: storing repository interfaces is safe -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+        <Class name="~.*ApplicationService$"/>
+        <Method name="&lt;init&gt;"/>
+    </Match>
+
+    <!-- Domain records: immutable by design, exposing fields is intentional -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+        <Class name="org.creatorledger.reporting.domain.CategoryTotals"/>
+    </Match>
+
+    <!-- Value objects and domain events: records with immutable semantics -->
     <Match>
         <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
         <Or>
