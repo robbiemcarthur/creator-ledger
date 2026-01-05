@@ -16,15 +16,6 @@ public record EventCreated(
     Instant occurredAt
 ) {
 
-    /**
-     * Creates an EventCreated event with the current timestamp.
-     *
-     * @param eventId the ID of the created event
-     * @param date the event date
-     * @param clientName the client name
-     * @param description the event description
-     * @return a new EventCreated event
-     */
     public static EventCreated of(EventId eventId, EventDate date, ClientName clientName, String description) {
         return new EventCreated(eventId, date, clientName, description, Instant.now());
     }

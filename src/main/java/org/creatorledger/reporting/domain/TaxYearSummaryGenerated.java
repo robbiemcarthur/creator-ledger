@@ -35,11 +35,6 @@ public record TaxYearSummaryGenerated(
         Instant occurredAt
 ) {
 
-    /**
-     * Creates a new TaxYearSummaryGenerated event.
-     *
-     * @throws IllegalArgumentException if any parameter is null
-     */
     public TaxYearSummaryGenerated {
         if (summaryId == null) {
             throw new IllegalArgumentException("Summary ID cannot be null");

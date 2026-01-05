@@ -77,7 +77,6 @@ class ModularitySpec extends Specification {
                 .writeIndividualModulesAsPlantUml()
 
         then: "documentation is created in target/modulith-docs/"
-        // PlantUML files are created (check target/modulith-docs/ directory)
         noExceptionThrown()
     }
 

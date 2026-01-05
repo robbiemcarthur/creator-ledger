@@ -15,7 +15,7 @@ public record EventId(UUID value) {
      * @return a new EventId
      * @throws IllegalArgumentException if value is null
      */
-    public static EventId of(UUID value) {
+    public static EventId of(final UUID value) {
         if (value == null) {
             throw new IllegalArgumentException("EventId cannot be null");
         }

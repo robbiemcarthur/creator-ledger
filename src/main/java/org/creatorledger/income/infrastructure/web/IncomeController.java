@@ -12,13 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.UUID;
 
-/**
- * REST controller for income-related endpoints.
- * <p>
- * This controller provides HTTP API access to income functionality,
- * translating HTTP requests/responses to application commands/queries.
- * </p>
- */
 @RestController
 @RequestMapping("/api/income")
 public class IncomeController {
@@ -29,12 +22,6 @@ public class IncomeController {
         this.incomeApplicationService = incomeApplicationService;
     }
 
-    /**
-     * Records new income.
-     *
-     * @param request the record request containing income details
-     * @return 201 Created with Location header pointing to the new income
-     */
     @PostMapping
     public ResponseEntity<Void> record(@RequestBody RecordIncomeRequest request) {
         try {
@@ -55,13 +42,6 @@ public class IncomeController {
         }
     }
 
-    /**
-     * Updates an existing income.
-     *
-     * @param id the income ID
-     * @param request the update request containing new income details
-     * @return 204 No Content if successful, 400 Bad Request if income not found or invalid
-     */
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable String id, @RequestBody UpdateIncomeRequest request) {
         try {
@@ -83,12 +63,6 @@ public class IncomeController {
         }
     }
 
-    /**
-     * Gets an income by its ID.
-     *
-     * @param id the income ID
-     * @return 200 OK with income data if found, 404 Not Found otherwise
-     */
     @GetMapping("/{id}")
     public ResponseEntity<IncomeResponse> getIncome(@PathVariable String id) {
         try {
@@ -104,12 +78,6 @@ public class IncomeController {
         }
     }
 
-    /**
-     * Checks if an income exists with the given ID.
-     *
-     * @param id the income ID
-     * @return 200 OK with boolean indicating existence
-     */
     @GetMapping("/{id}/exists")
     public ResponseEntity<Boolean> existsById(@PathVariable String id) {
         try {
@@ -123,12 +91,6 @@ public class IncomeController {
         }
     }
 
-    /**
-     * Marks an income as paid.
-     *
-     * @param id the income ID
-     * @return 204 No Content if successful, 400 Bad Request if income not found or invalid
-     */
     @PutMapping("/{id}/mark-as-paid")
     public ResponseEntity<Void> markAsPaid(@PathVariable String id) {
         try {
@@ -142,12 +104,6 @@ public class IncomeController {
         }
     }
 
-    /**
-     * Marks an income as overdue.
-     *
-     * @param id the income ID
-     * @return 204 No Content if successful, 400 Bad Request if income not found or invalid
-     */
     @PutMapping("/{id}/mark-as-overdue")
     public ResponseEntity<Void> markAsOverdue(@PathVariable String id) {
         try {
@@ -161,12 +117,6 @@ public class IncomeController {
         }
     }
 
-    /**
-     * Cancels an income.
-     *
-     * @param id the income ID
-     * @return 204 No Content if successful, 400 Bad Request if income not found or invalid
-     */
     @PutMapping("/{id}/cancel")
     public ResponseEntity<Void> cancel(@PathVariable String id) {
         try {

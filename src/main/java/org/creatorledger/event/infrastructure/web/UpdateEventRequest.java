@@ -15,11 +15,6 @@ import java.time.LocalDate;
  */
 public record UpdateEventRequest(LocalDate date, String clientName, String description) {
 
-    /**
-     * Creates a new UpdateEventRequest.
-     *
-     * @throws IllegalArgumentException if any field is null or invalid
-     */
     public UpdateEventRequest {
         if (date == null) {
             throw new IllegalArgumentException("Date cannot be null");

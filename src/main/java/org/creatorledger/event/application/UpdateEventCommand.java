@@ -4,25 +4,8 @@ import org.creatorledger.event.api.EventId;
 
 import java.time.LocalDate;
 
-/**
- * Command to update an existing event.
- * <p>
- * This command is used by the application layer to encapsulate the intent
- * to update an event's details.
- * </p>
- *
- * @param eventId the ID of the event to update
- * @param date the new event date
- * @param clientName the new client name
- * @param description the new event description
- */
 public record UpdateEventCommand(EventId eventId, LocalDate date, String clientName, String description) {
 
-    /**
-     * Creates a new UpdateEventCommand.
-     *
-     * @throws IllegalArgumentException if any field is null or invalid
-     */
     public UpdateEventCommand {
         if (eventId == null) {
             throw new IllegalArgumentException("Event ID cannot be null");

@@ -27,14 +27,8 @@ public class EventController {
         this.eventApplicationService = eventApplicationService;
     }
 
-    /**
-     * Creates a new event.
-     *
-     * @param request the creation request containing event details
-     * @return 201 Created with Location header pointing to the new event
-     */
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody CreateEventRequest request) {
+    public ResponseEntity<Void> create(@RequestBody final CreateEventRequest request) {
         try {
             CreateEventCommand command = new CreateEventCommand(
                     request.date(),
@@ -50,15 +44,8 @@ public class EventController {
         }
     }
 
-    /**
-     * Updates an existing event.
-     *
-     * @param id the event ID
-     * @param request the update request containing new event details
-     * @return 204 No Content if successful, 400 Bad Request if event not found or invalid
-     */
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable String id, @RequestBody UpdateEventRequest request) {
+    public ResponseEntity<Void> update(@PathVariable final String id, @RequestBody final UpdateEventRequest request) {
         try {
             UUID uuid = UUID.fromString(id);
             EventId eventId = EventId.of(uuid);
@@ -84,7 +71,7 @@ public class EventController {
      * @return 200 OK with event data if found, 404 Not Found otherwise
      */
     @GetMapping("/{id}")
-    public ResponseEntity<EventResponse> getEvent(@PathVariable String id) {
+    public ResponseEntity<EventResponse> getEvent(@PathVariable final String id) {
         try {
             UUID uuid = UUID.fromString(id);
             EventId eventId = EventId.of(uuid);
@@ -105,7 +92,7 @@ public class EventController {
      * @return 200 OK with boolean indicating existence
      */
     @GetMapping("/{id}/exists")
-    public ResponseEntity<Boolean> existsById(@PathVariable String id) {
+    public ResponseEntity<Boolean> existsById(@PathVariable final String id) {
         try {
             UUID uuid = UUID.fromString(id);
             EventId eventId = EventId.of(uuid);

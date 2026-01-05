@@ -16,14 +16,7 @@ import org.creatorledger.event.domain.Event;
  */
 public record EventResponse(String id, String date, String clientName, String description) {
 
-    /**
-     * Creates an EventResponse from a domain Event.
-     *
-     * @param event the domain event
-     * @return an EventResponse containing the event's data
-     * @throws IllegalArgumentException if event is null
-     */
-    public static EventResponse from(Event event) {
+    public static EventResponse from(final Event event) {
         if (event == null) {
             throw new IllegalArgumentException("Event cannot be null");
         }

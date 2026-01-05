@@ -24,6 +24,8 @@ Claude must:
 - Refactor only when green
 - Keep structural and behavioural changes separate
 
+## 2.2 Follow my Coding Standards: CODINGSTANDARDS.md whenever you write Java code. 
+
 ### Commit discipline
 Claude must only commit when:
 - All tests pass

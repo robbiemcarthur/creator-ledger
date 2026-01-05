@@ -18,7 +18,7 @@ public record ExpenseRecorded(
     Instant occurredAt
 ) {
 
-    public static ExpenseRecorded of(ExpenseId expenseId, UserId userId, Money amount, ExpenseCategory category, String description, LocalDate incurredDate) {
+    public static ExpenseRecorded of(final ExpenseId expenseId, final UserId userId, final Money amount, final ExpenseCategory category, final String description, final LocalDate incurredDate) {
         return new ExpenseRecorded(expenseId, userId, amount, category, description, incurredDate, Instant.now());
     }
 

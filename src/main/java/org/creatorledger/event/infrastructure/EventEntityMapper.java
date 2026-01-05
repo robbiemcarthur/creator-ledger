@@ -20,7 +20,7 @@ public class EventEntityMapper {
      * @param event the domain event
      * @return the JPA entity
      */
-    public static EventJpaEntity toEntity(Event event) {
+    public static EventJpaEntity toEntity(final Event event) {
         if (event == null) {
             return null;
         }

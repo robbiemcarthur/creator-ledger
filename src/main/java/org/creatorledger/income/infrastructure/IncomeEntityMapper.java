@@ -7,22 +7,9 @@ import org.creatorledger.income.domain.Income;
 import org.creatorledger.income.domain.PaymentStatus;
 import org.creatorledger.user.api.UserId;
 
-/**
- * Mapper for converting between domain Income and IncomeJpaEntity.
- * <p>
- * This keeps the domain model clean from persistence annotations and
- * allows the infrastructure to evolve independently from the domain.
- * </p>
- */
 public class IncomeEntityMapper {
 
-    /**
-     * Converts a domain Income to a JPA entity.
-     *
-     * @param income the domain income
-     * @return the JPA entity
-     */
-    public static IncomeJpaEntity toEntity(Income income) {
+    public static IncomeJpaEntity toEntity(final Income income) {
         if (income == null) {
             return null;
         }
@@ -38,13 +25,7 @@ public class IncomeEntityMapper {
         );
     }
 
-    /**
-     * Converts a JPA entity to a domain Income.
-     *
-     * @param entity the JPA entity
-     * @return the domain income
-     */
-    public static Income toDomain(IncomeJpaEntity entity) {
+    public static Income toDomain(final IncomeJpaEntity entity) {
         if (entity == null) {
             return null;
         }
@@ -58,7 +39,6 @@ public class IncomeEntityMapper {
                 entity.getReceivedDate()
         );
 
-        // Apply the status from the entity (could be different from PENDING)
         PaymentStatus status = PaymentStatus.valueOf(entity.getStatus());
         if (status == PaymentStatus.PAID) {
             return income.markAsPaid();

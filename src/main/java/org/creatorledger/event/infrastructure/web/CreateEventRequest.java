@@ -15,11 +15,6 @@ import java.time.LocalDate;
  */
 public record CreateEventRequest(LocalDate date, String clientName, String description) {
 
-    /**
-     * Creates a new CreateEventRequest.
-     *
-     * @throws IllegalArgumentException if any field is null or invalid
-     */
     public CreateEventRequest {
         if (date == null) {
             throw new IllegalArgumentException("Date cannot be null");

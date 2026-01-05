@@ -8,36 +8,22 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-/**
- * Application service for Income aggregate operations.
- * <p>
- * This service coordinates income-related use cases, delegating to the domain layer
- * for business logic and the repository for persistence.
- * </p>
- */
 @Service
 public class IncomeApplicationService {
 
     private final IncomeRepository incomeRepository;
 
-    public IncomeApplicationService(IncomeRepository incomeRepository) {
+    public IncomeApplicationService(final IncomeRepository incomeRepository) {
         this.incomeRepository = incomeRepository;
     }
 
-    /**
-     * Records new income in the system.
-     *
-     * @param command the record income command
-     * @return the ID of the newly recorded income
-     * @throws IllegalArgumentException if command is null
-     */
-    public IncomeId record(RecordIncomeCommand command) {
+    public IncomeId record(final RecordIncomeCommand command) {
         if (command == null) {
             throw new IllegalArgumentException("Command cannot be null");
         }
 
-        Money amount = Money.of(new BigDecimal(command.amount()), command.currency());
-        Income income = Income.record(
+        final Money amount = Money.of(new BigDecimal(command.amount()), command.currency());
+        final Income income = Income.record(
                 IncomeId.generate(),
                 command.userId(),
                 command.eventId(),
@@ -50,23 +36,16 @@ public class IncomeApplicationService {
         return income.id();
     }
 
-    /**
-     * Updates an existing income.
-     *
-     * @param command the update income command
-     * @throws IllegalArgumentException if command is null
-     * @throws IllegalStateException if income not found
-     */
-    public void update(UpdateIncomeCommand command) {
+    public void update(final UpdateIncomeCommand command) {
         if (command == null) {
             throw new IllegalArgumentException("Command cannot be null");
         }
 
-        Income existingIncome = incomeRepository.findById(command.incomeId())
+        final Income existingIncome = incomeRepository.findById(command.incomeId())
                 .orElseThrow(() -> new IllegalStateException("Income not found: " + command.incomeId()));
 
-        Money amount = Money.of(new BigDecimal(command.amount()), command.currency());
-        Income updatedIncome = existingIncome.update(
+        final Money amount = Money.of(new BigDecimal(command.amount()), command.currency());
+        final Income updatedIncome = existingIncome.update(
                 amount,
                 command.description(),
                 command.receivedDate()
@@ -75,14 +54,7 @@ public class IncomeApplicationService {
         incomeRepository.save(updatedIncome);
     }
 
-    /**
-     * Marks an income as paid.
-     *
-     * @param incomeId the income ID
-     * @throws IllegalArgumentException if incomeId is null
-     * @throws IllegalStateException if income not found
-     */
-    public void markAsPaid(IncomeId incomeId) {
+    public void markAsPaid(final IncomeId incomeId) {
         if (incomeId == null) {
             throw new IllegalArgumentException("Income ID cannot be null");
         }
@@ -94,14 +66,7 @@ public class IncomeApplicationService {
         incomeRepository.save(paidIncome);
     }
 
-    /**
-     * Marks an income as overdue.
-     *
-     * @param incomeId the income ID
-     * @throws IllegalArgumentException if incomeId is null
-     * @throws IllegalStateException if income not found
-     */
-    public void markAsOverdue(IncomeId incomeId) {
+    public void markAsOverdue(final IncomeId incomeId) {
         if (incomeId == null) {
             throw new IllegalArgumentException("Income ID cannot be null");
         }
@@ -113,14 +78,7 @@ public class IncomeApplicationService {
         incomeRepository.save(overdueIncome);
     }
 
-    /**
-     * Cancels an income.
-     *
-     * @param incomeId the income ID
-     * @throws IllegalArgumentException if incomeId is null
-     * @throws IllegalStateException if income not found
-     */
-    public void cancel(IncomeId incomeId) {
+    public void cancel(final IncomeId incomeId) {
         if (incomeId == null) {
             throw new IllegalArgumentException("Income ID cannot be null");
         }
@@ -132,29 +90,15 @@ public class IncomeApplicationService {
         incomeRepository.save(cancelledIncome);
     }
 
-    /**
-     * Finds an income by its ID.
-     *
-     * @param incomeId the income ID
-     * @return an Optional containing the income if found, empty otherwise
-     * @throws IllegalArgumentException if incomeId is null
-     */
-    public Optional<Income> findById(IncomeId incomeId) {
+    public Optional<Income> findById(final IncomeId incomeId) {
         if (incomeId == null) {
             throw new IllegalArgumentException("Income ID cannot be null");
         }
 
         return incomeRepository.findById(incomeId);
     }
-
-    /**
-     * Checks if an income exists with the given ID.
-     *
-     * @param incomeId the income ID
-     * @return true if an income exists, false otherwise
-     * @throws IllegalArgumentException if incomeId is null
-     */
-    public boolean existsById(IncomeId incomeId) {
+    
+    public boolean existsById(final IncomeId incomeId) {
         if (incomeId == null) {
             throw new IllegalArgumentException("Income ID cannot be null");
         }

@@ -5,20 +5,6 @@ import org.creatorledger.user.api.UserId;
 
 import java.time.LocalDate;
 
-/**
- * Command to record new income.
- * <p>
- * This command is used by the application layer to encapsulate the intent
- * to record new income in the system.
- * </p>
- *
- * @param userId the user ID
- * @param eventId the associated event ID
- * @param amount the income amount as a string
- * @param currency the currency code (e.g., "GBP", "USD")
- * @param description the income description
- * @param receivedDate the date income was received
- */
 public record RecordIncomeCommand(
         UserId userId,
         EventId eventId,
@@ -28,11 +14,6 @@ public record RecordIncomeCommand(
         LocalDate receivedDate
 ) {
 
-    /**
-     * Creates a new RecordIncomeCommand.
-     *
-     * @throws IllegalArgumentException if any field is null or invalid
-     */
     public RecordIncomeCommand {
         if (userId == null) {
             throw new IllegalArgumentException("User ID cannot be null");

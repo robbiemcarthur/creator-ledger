@@ -4,19 +4,6 @@ import org.creatorledger.income.api.IncomeId;
 
 import java.time.LocalDate;
 
-/**
- * Command to update an existing income.
- * <p>
- * This command is used by the application layer to encapsulate the intent
- * to update an income's details.
- * </p>
- *
- * @param incomeId the ID of the income to update
- * @param amount the new income amount as a string
- * @param currency the currency code (e.g., "GBP", "USD")
- * @param description the new income description
- * @param receivedDate the new received date
- */
 public record UpdateIncomeCommand(
         IncomeId incomeId,
         String amount,
@@ -25,11 +12,6 @@ public record UpdateIncomeCommand(
         LocalDate receivedDate
 ) {
 
-    /**
-     * Creates a new UpdateIncomeCommand.
-     *
-     * @throws IllegalArgumentException if any field is null or invalid
-     */
     public UpdateIncomeCommand {
         if (incomeId == null) {
             throw new IllegalArgumentException("Income ID cannot be null");

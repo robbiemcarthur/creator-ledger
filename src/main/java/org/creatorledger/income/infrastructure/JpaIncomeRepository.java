@@ -25,25 +25,25 @@ public class JpaIncomeRepository implements IncomeRepository {
     }
 
     @Override
-    public Income save(Income income) {
+    public Income save(final Income income) {
         IncomeJpaEntity entity = IncomeEntityMapper.toEntity(income);
         IncomeJpaEntity saved = springDataRepository.save(entity);
         return IncomeEntityMapper.toDomain(saved);
     }
 
     @Override
-    public Optional<Income> findById(IncomeId id) {
+    public Optional<Income> findById(final IncomeId id) {
         return springDataRepository.findById(id.value())
                 .map(IncomeEntityMapper::toDomain);
     }
 
     @Override
-    public boolean existsById(IncomeId id) {
+    public boolean existsById(final IncomeId id) {
         return springDataRepository.existsById(id.value());
     }
 
     @Override
-    public void delete(Income income) {
+    public void delete(final Income income) {
         springDataRepository.deleteById(income.id().value());
     }
 }

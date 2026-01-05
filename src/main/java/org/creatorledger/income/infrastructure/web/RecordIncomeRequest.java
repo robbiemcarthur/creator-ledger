@@ -3,20 +3,6 @@ package org.creatorledger.income.infrastructure.web;
 import java.time.LocalDate;
 import java.util.UUID;
 
-/**
- * Request DTO for income recording endpoint.
- * <p>
- * This is a presentation layer concern for HTTP API communication.
- * It is converted to RecordIncomeCommand for application layer processing.
- * </p>
- *
- * @param userId the user ID
- * @param eventId the associated event ID
- * @param amount the income amount as a string
- * @param currency the currency code (e.g., "GBP", "USD")
- * @param description the income description
- * @param receivedDate the date income was received
- */
 public record RecordIncomeRequest(
         UUID userId,
         UUID eventId,
@@ -26,11 +12,6 @@ public record RecordIncomeRequest(
         LocalDate receivedDate
 ) {
 
-    /**
-     * Creates a new RecordIncomeRequest.
-     *
-     * @throws IllegalArgumentException if any field is null or invalid
-     */
     public RecordIncomeRequest {
         if (userId == null) {
             throw new IllegalArgumentException("User ID cannot be null");

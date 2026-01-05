@@ -28,71 +28,43 @@ public class EventApplicationService {
         this.eventRepository = eventRepository;
     }
 
-    /**
-     * Creates a new event in the system.
-     *
-     * @param command the create command containing event details
-     * @return the ID of the newly created event
-     * @throws IllegalArgumentException if command is null
-     */
-    public EventId create(CreateEventCommand command) {
+    public EventId create(final CreateEventCommand command) {
         if (command == null) {
             throw new IllegalArgumentException("Command cannot be null");
         }
 
-        EventDate date = EventDate.of(command.date());
-        ClientName clientName = ClientName.of(command.clientName());
-        Event event = Event.create(date, clientName, command.description());
+        final EventDate date = EventDate.of(command.date());
+        final ClientName clientName = ClientName.of(command.clientName());
+        final Event event = Event.create(date, clientName, command.description());
 
         eventRepository.save(event);
 
         return event.id();
     }
 
-    /**
-     * Updates an existing event with new details.
-     *
-     * @param command the update command containing event ID and new details
-     * @throws IllegalArgumentException if command is null
-     * @throws IllegalStateException if event is not found
-     */
-    public void update(UpdateEventCommand command) {
+    public void update(final UpdateEventCommand command) {
         if (command == null) {
             throw new IllegalArgumentException("Command cannot be null");
         }
 
-        Event existingEvent = eventRepository.findById(command.eventId())
+        final Event existingEvent = eventRepository.findById(command.eventId())
             .orElseThrow(() -> new IllegalStateException("Event not found: " + command.eventId()));
 
-        EventDate date = EventDate.of(command.date());
-        ClientName clientName = ClientName.of(command.clientName());
-        Event updatedEvent = existingEvent.update(date, clientName, command.description());
+        final EventDate date = EventDate.of(command.date());
+        final ClientName clientName = ClientName.of(command.clientName());
+        final Event updatedEvent = existingEvent.update(date, clientName, command.description());
 
         eventRepository.save(updatedEvent);
     }
 
-    /**
-     * Finds an event by its unique identifier.
-     *
-     * @param eventId the event ID
-     * @return an Optional containing the event if found, empty otherwise
-     * @throws IllegalArgumentException if eventId is null
-     */
-    public Optional<Event> findById(EventId eventId) {
+    public Optional<Event> findById(final EventId eventId) {
         if (eventId == null) {
             throw new IllegalArgumentException("Event ID cannot be null");
         }
         return eventRepository.findById(eventId);
     }
 
-    /**
-     * Checks if an event exists with the given ID.
-     *
-     * @param eventId the event ID
-     * @return true if an event exists, false otherwise
-     * @throws IllegalArgumentException if eventId is null
-     */
-    public boolean existsById(EventId eventId) {
+    public boolean existsById(final EventId eventId) {
         if (eventId == null) {
             throw new IllegalArgumentException("Event ID cannot be null");
         }

@@ -38,7 +38,7 @@ public class EventJpaEntity {
     protected EventJpaEntity() {
     }
 
-    public EventJpaEntity(UUID id, LocalDate eventDate, String clientName, String description) {
+    public EventJpaEntity(final UUID id, final LocalDate eventDate, final String clientName, final String description) {
         this.id = id;
         this.eventDate = eventDate;
         this.clientName = clientName;
@@ -57,15 +57,11 @@ public class EventJpaEntity {
         return eventDate;
     }
 
-    public void setEventDate(LocalDate eventDate) {
-        this.eventDate = eventDate;
-    }
-
     public String getClientName() {
         return clientName;
     }
 
-    public void setClientName(String clientName) {
+    public void setClientName(final String clientName) {
         this.clientName = clientName;
     }
 
@@ -73,7 +69,7 @@ public class EventJpaEntity {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 }

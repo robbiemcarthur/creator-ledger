@@ -8,10 +8,6 @@ import org.creatorledger.user.api.UserId;
 import java.time.Instant;
 import java.time.LocalDate;
 
-/**
- * Domain event published when income is recorded.
- * This event can be consumed by other modules for cross-cutting concerns.
- */
 public record IncomeRecorded(
     IncomeId incomeId,
     UserId userId,
@@ -21,18 +17,6 @@ public record IncomeRecorded(
     LocalDate receivedDate,
     Instant occurredAt
 ) {
-
-    /**
-     * Creates an IncomeRecorded event with the current timestamp.
-     *
-     * @param incomeId the ID of the recorded income
-     * @param userId the user ID
-     * @param eventId the associated event ID
-     * @param amount the income amount
-     * @param description the income description
-     * @param receivedDate the date income was received
-     * @return a new IncomeRecorded event
-     */
     public static IncomeRecorded of(IncomeId incomeId, UserId userId, EventId eventId, Money amount, String description, LocalDate receivedDate) {
         return new IncomeRecorded(incomeId, userId, eventId, amount, description, receivedDate, Instant.now());
     }

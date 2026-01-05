@@ -7,10 +7,6 @@ import org.creatorledger.user.api.UserId;
 
 import java.time.LocalDate;
 
-/**
- * Aggregate root representing income from a business event.
- * Income is identified by IncomeId and tracks payment status, amount, and associated event.
- */
 public record Income(
     IncomeId id,
     UserId userId,
@@ -21,33 +17,10 @@ public record Income(
     PaymentStatus status
 ) {
 
-    /**
-     * Records new income with a generated ID.
-     *
-     * @param userId the user ID
-     * @param eventId the associated event ID
-     * @param amount the income amount
-     * @param description the income description
-     * @param receivedDate the date income was received
-     * @return a new Income
-     * @throws IllegalArgumentException if any parameter is invalid
-     */
     public static Income record(UserId userId, EventId eventId, Money amount, String description, LocalDate receivedDate) {
         return record(IncomeId.generate(), userId, eventId, amount, description, receivedDate);
     }
 
-    /**
-     * Records new income with a specific ID.
-     *
-     * @param id the income ID
-     * @param userId the user ID
-     * @param eventId the associated event ID
-     * @param amount the income amount
-     * @param description the income description
-     * @param receivedDate the date income was received
-     * @return a new Income
-     * @throws IllegalArgumentException if any parameter is invalid
-     */
     public static Income record(IncomeId id, UserId userId, EventId eventId, Money amount, String description, LocalDate receivedDate) {
         validateIncomeId(id);
         validateUserId(userId);
@@ -95,7 +68,7 @@ public record Income(
      * @return a new Income with updated details
      * @throws IllegalArgumentException if any parameter is invalid
      */
-    public Income update(Money amount, String description, LocalDate receivedDate) {
+    public Income update(final Money amount, final String description, final LocalDate receivedDate) {
         validateAmount(amount);
         validateDescription(description);
         validateReceivedDate(receivedDate);
@@ -103,37 +76,37 @@ public record Income(
         return new Income(this.id, this.userId, this.eventId, amount, description.trim(), receivedDate, this.status);
     }
 
-    private static void validateIncomeId(IncomeId id) {
+    private static void validateIncomeId(final IncomeId id) {
         if (id == null) {
             throw new IllegalArgumentException("IncomeId cannot be null");
         }
     }
 
-    private static void validateUserId(UserId userId) {
+    private static void validateUserId(final UserId userId) {
         if (userId == null) {
             throw new IllegalArgumentException("UserId cannot be null");
         }
     }
 
-    private static void validateEventId(EventId eventId) {
+    private static void validateEventId(final EventId eventId) {
         if (eventId == null) {
             throw new IllegalArgumentException("EventId cannot be null");
         }
     }
 
-    private static void validateAmount(Money amount) {
+    private static void validateAmount(final Money amount) {
         if (amount == null) {
             throw new IllegalArgumentException("Amount cannot be null");
         }
     }
 
-    private static void validateDescription(String description) {
+    private static void validateDescription(final String description) {
         if (description == null || description.isBlank()) {
             throw new IllegalArgumentException("Description cannot be null or blank");
         }
     }
 
-    private static void validateReceivedDate(LocalDate receivedDate) {
+    private static void validateReceivedDate(final LocalDate receivedDate) {
         if (receivedDate == null) {
             throw new IllegalArgumentException("ReceivedDate cannot be null");
         }
