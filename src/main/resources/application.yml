@@ -7,4 +7,4 @@ logging:
     org.springframework.modulith: INFO
     org.creatorledger: INFO
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [%X{correlationId:-}] --- [%t] %-40.40logger{39} : %m%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p --- [%t] %-40.40logger{39} : %m%n"
