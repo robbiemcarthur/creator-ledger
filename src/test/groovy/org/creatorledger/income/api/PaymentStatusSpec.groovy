@@ -1,5 +1,6 @@
-package org.creatorledger.income.domain
+package org.creatorledger.income.api
 
+import org.creatorledger.income.api.PaymentStatus
 import spock.lang.Specification
 
 class PaymentStatusSpec extends Specification {

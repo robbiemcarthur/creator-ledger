@@ -4,7 +4,7 @@ import org.creatorledger.common.Money
 import org.creatorledger.event.api.EventId
 import org.creatorledger.income.api.IncomeId
 import org.creatorledger.income.domain.Income
-import org.creatorledger.income.domain.PaymentStatus
+import org.creatorledger.income.api.PaymentStatus
 import org.creatorledger.user.api.UserId
 import spock.lang.Specification
 import java.time.LocalDate

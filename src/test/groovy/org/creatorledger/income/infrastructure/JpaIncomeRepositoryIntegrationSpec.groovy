@@ -3,6 +3,7 @@ package org.creatorledger.income.infrastructure
 import org.creatorledger.common.Money
 import org.creatorledger.event.api.EventId
 import org.creatorledger.income.api.IncomeId
+import org.creatorledger.income.api.PaymentStatus
 import org.creatorledger.income.domain.Income
 import org.creatorledger.user.api.UserId
 import org.springframework.beans.factory.annotation.Autowired
@@ -175,6 +176,6 @@ class JpaIncomeRepositoryIntegrationSpec extends Specification {
 
         then: "status is persisted correctly"
         retrieved.isPresent()
-        retrieved.get().status() == org.creatorledger.income.domain.PaymentStatus.PAID
+        retrieved.get().status() == PaymentStatus.PAID
     }
 }

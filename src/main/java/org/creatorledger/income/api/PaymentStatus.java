@@ -1,4 +1,4 @@
-package org.creatorledger.income.domain;
+package org.creatorledger.income.api;
 
 /**
  * Enum representing the payment status of income.

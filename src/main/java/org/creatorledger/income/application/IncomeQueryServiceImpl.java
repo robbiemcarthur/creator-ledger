@@ -19,6 +19,19 @@ public class IncomeQueryServiceImpl implements IncomeQueryService {
 
     @Override
     public List<IncomeData> findByUserIdAndDateRange(final UserId userId, final LocalDate startDate, final LocalDate endDate) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+        if (startDate == null) {
+            throw new IllegalArgumentException("Start date cannot be null");
+        }
+        if (endDate == null) {
+            throw new IllegalArgumentException("End date cannot be null");
+        }
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date");
+        }
+
         return incomeRepository.findByUserIdAndDateRange(userId, startDate, endDate)
                 .stream()
                 .map(IncomeData::from)

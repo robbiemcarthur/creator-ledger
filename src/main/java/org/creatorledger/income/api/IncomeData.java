@@ -3,7 +3,7 @@ package org.creatorledger.income.api;
 import org.creatorledger.common.Money;
 import org.creatorledger.event.api.EventId;
 import org.creatorledger.income.domain.Income;
-import org.creatorledger.income.domain.PaymentStatus;
+import org.creatorledger.income.api.PaymentStatus;
 import org.creatorledger.user.api.UserId;
 
 import java.time.LocalDate;
