@@ -36,10 +36,15 @@ Use:
 ### Commit Requirements
 A commit is allowed only when:
 
+- **`./gradlew check` passes** (this runs tests, SpotBugs, JaCoCo coverage, all quality checks)
 - All tests pass
 - No warnings
+- No SpotBugs violations
+- Code coverage meets minimum threshold
 - Single logical change
 - Behavioural and structural changes are separate
+
+**CRITICAL**: ALWAYS run `./gradlew check` before committing. Never commit without running the full check suite.
 
 ---
 

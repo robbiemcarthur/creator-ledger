@@ -16,6 +16,10 @@ public record TaxYearSummaryResponse(
     Map<ExpenseCategory, MoneyDto> categoryTotals
 ) {
 
+    public TaxYearSummaryResponse {
+        categoryTotals = Map.copyOf(categoryTotals);
+    }
+
     public static TaxYearSummaryResponse from(final TaxYearSummary summary) {
         if (summary == null) {
             throw new IllegalArgumentException("Tax year summary cannot be null");

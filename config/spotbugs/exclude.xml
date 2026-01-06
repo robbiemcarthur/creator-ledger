@@ -27,6 +27,13 @@
         <Method name="&lt;init&gt;"/>
     </Match>
 
+    <!-- Query service implementations: storing repository interfaces is safe (dependency injection) -->
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+        <Class name="~.*QueryServiceImpl$"/>
+        <Method name="&lt;init&gt;"/>
+    </Match>
+
     <!-- Domain records: immutable by design, exposing fields is intentional -->
     <Match>
         <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
