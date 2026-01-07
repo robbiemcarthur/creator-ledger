@@ -1,8 +1,10 @@
 package org.creatorledger.income.application;
 
 import org.creatorledger.income.domain.Income;
+import org.creatorledger.income.domain.IncomeRecorded;
 import org.creatorledger.income.api.IncomeId;
 import org.creatorledger.common.Money;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,9 +14,17 @@ import java.util.Optional;
 public class IncomeApplicationService {
 
     private final IncomeRepository incomeRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public IncomeApplicationService(final IncomeRepository incomeRepository) {
+    public IncomeApplicationService(final IncomeRepository incomeRepository, final ApplicationEventPublisher eventPublisher) {
+        if (incomeRepository == null) {
+            throw new IllegalArgumentException("Income repository cannot be null");
+        }
+        if (eventPublisher == null) {
+            throw new IllegalArgumentException("Event publisher cannot be null");
+        }
         this.incomeRepository = incomeRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public IncomeId record(final RecordIncomeCommand command) {
@@ -33,6 +43,18 @@ public class IncomeApplicationService {
         );
 
         incomeRepository.save(income);
+
+        // Publish domain event
+        final IncomeRecorded event = IncomeRecorded.of(
+            income.id(),
+            income.userId(),
+            income.eventId(),
+            income.amount(),
+            income.description(),
+            income.receivedDate()
+        );
+        eventPublisher.publishEvent(event);
+
         return income.id();
     }
 

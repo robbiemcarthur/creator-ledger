@@ -3,7 +3,10 @@ package org.creatorledger.event.application;
 import org.creatorledger.event.api.EventId;
 import org.creatorledger.event.domain.ClientName;
 import org.creatorledger.event.domain.Event;
+import org.creatorledger.event.domain.EventCreated;
 import org.creatorledger.event.domain.EventDate;
+import org.creatorledger.event.domain.EventUpdated;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,12 +23,17 @@ import java.util.Optional;
 public class EventApplicationService {
 
     private final EventRepository eventRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public EventApplicationService(EventRepository eventRepository) {
+    public EventApplicationService(EventRepository eventRepository, ApplicationEventPublisher eventPublisher) {
         if (eventRepository == null) {
             throw new IllegalArgumentException("Event repository cannot be null");
         }
+        if (eventPublisher == null) {
+            throw new IllegalArgumentException("Event publisher cannot be null");
+        }
         this.eventRepository = eventRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public EventId create(final CreateEventCommand command) {
@@ -38,6 +46,15 @@ public class EventApplicationService {
         final Event event = Event.create(date, clientName, command.description());
 
         eventRepository.save(event);
+
+        // Publish domain event
+        final EventCreated eventCreated = EventCreated.of(
+            event.id(),
+            event.date(),
+            event.clientName(),
+            event.description()
+        );
+        eventPublisher.publishEvent(eventCreated);
 
         return event.id();
     }
@@ -55,6 +72,15 @@ public class EventApplicationService {
         final Event updatedEvent = existingEvent.update(date, clientName, command.description());
 
         eventRepository.save(updatedEvent);
+
+        // Publish domain event
+        final EventUpdated eventUpdated = EventUpdated.of(
+            updatedEvent.id(),
+            updatedEvent.date(),
+            updatedEvent.clientName(),
+            updatedEvent.description()
+        );
+        eventPublisher.publishEvent(eventUpdated);
     }
 
     public Optional<Event> findById(final EventId eventId) {

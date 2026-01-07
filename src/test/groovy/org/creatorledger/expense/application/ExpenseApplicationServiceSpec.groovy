@@ -4,7 +4,9 @@ import org.creatorledger.common.Money
 import org.creatorledger.expense.api.ExpenseCategory
 import org.creatorledger.expense.api.ExpenseId
 import org.creatorledger.expense.domain.Expense
+import org.creatorledger.expense.domain.ExpenseRecorded
 import org.creatorledger.user.api.UserId
+import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -12,11 +14,13 @@ import java.time.LocalDate
 class ExpenseApplicationServiceSpec extends Specification {
 
     ExpenseRepository expenseRepository
+    ApplicationEventPublisher eventPublisher
     ExpenseApplicationService service
 
     def setup() {
         expenseRepository = Mock(ExpenseRepository)
-        service = new ExpenseApplicationService(expenseRepository)
+        eventPublisher = Mock(ApplicationEventPublisher)
+        service = new ExpenseApplicationService(expenseRepository, eventPublisher)
     }
 
     def "should record new expense"() {
@@ -44,6 +48,37 @@ class ExpenseApplicationServiceSpec extends Specification {
             return expense
         }
         expenseId != null
+    }
+
+    def "should publish ExpenseRecorded event when recording expense"() {
+        given: "a valid record command"
+        def userId = UserId.generate()
+        def command = new RecordExpenseCommand(
+                userId,
+                "150.00",
+                "GBP",
+                ExpenseCategory.EQUIPMENT,
+                "MacBook Pro laptop",
+                LocalDate.of(2026, 1, 15)
+        )
+
+        when: "recording the expense"
+        service.record(command)
+
+        then: "the expense is saved"
+        1 * expenseRepository.save(_ as Expense) >> { Expense expense -> expense }
+
+        and: "ExpenseRecorded event is published"
+        1 * eventPublisher.publishEvent(_) >> { arguments ->
+            def event = arguments[0]
+            assert event instanceof ExpenseRecorded
+            assert event.userId() == userId
+            assert event.amount() == Money.gbp("150.00")
+            assert event.category() == ExpenseCategory.EQUIPMENT
+            assert event.description() == "MacBook Pro laptop"
+            assert event.incurredDate() == LocalDate.of(2026, 1, 15)
+            assert event.occurredAt() != null
+        }
     }
 
     def "should reject null command when recording"() {

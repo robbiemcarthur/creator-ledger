@@ -1,10 +1,15 @@
 spring:
   application:
     name: creator-ledger
+  modulith:
+    events:
+      jdbc:
+        enabled: true
 
 logging:
   level:
     org.springframework.modulith: INFO
+    org.springframework.modulith.events: DEBUG
     org.creatorledger: INFO
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p --- [%t] %-40.40logger{39} : %m%n"

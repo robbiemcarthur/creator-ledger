@@ -3,20 +3,24 @@ package org.creatorledger.income.application
 import org.creatorledger.event.api.EventId
 import org.creatorledger.income.api.IncomeId
 import org.creatorledger.income.domain.Income
+import org.creatorledger.income.domain.IncomeRecorded
 import org.creatorledger.income.api.PaymentStatus
 import org.creatorledger.common.Money
 import org.creatorledger.user.api.UserId
+import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 import java.time.LocalDate
 
 class IncomeApplicationServiceSpec extends Specification {
 
     IncomeRepository incomeRepository
+    ApplicationEventPublisher eventPublisher
     IncomeApplicationService service
 
     def setup() {
         incomeRepository = Mock(IncomeRepository)
-        service = new IncomeApplicationService(incomeRepository)
+        eventPublisher = Mock(ApplicationEventPublisher)
+        service = new IncomeApplicationService(incomeRepository, eventPublisher)
     }
 
     def "should record new income"() {
@@ -44,6 +48,38 @@ class IncomeApplicationServiceSpec extends Specification {
 
         and: "the income ID is returned"
         incomeId != null
+    }
+
+    def "should publish IncomeRecorded event when recording income"() {
+        given: "a record income command"
+        def userId = UserId.generate()
+        def eventId = EventId.generate()
+        def command = new RecordIncomeCommand(
+            userId,
+            eventId,
+            "500.00",
+            "GBP",
+            "Website design project",
+            LocalDate.of(2026, 1, 15)
+        )
+
+        when: "recording the income"
+        service.record(command)
+
+        then: "the income is saved"
+        1 * incomeRepository.save(_) >> { Income income -> income }
+
+        and: "IncomeRecorded event is published"
+        1 * eventPublisher.publishEvent(_) >> { arguments ->
+            def event = arguments[0]
+            assert event instanceof IncomeRecorded
+            assert event.userId() == userId
+            assert event.eventId() == eventId
+            assert event.amount() == Money.gbp("500.00")
+            assert event.description() == "Website design project"
+            assert event.receivedDate() == LocalDate.of(2026, 1, 15)
+            assert event.occurredAt() != null
+        }
     }
 
     def "should reject null command when recording"() {

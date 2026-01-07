@@ -9,11 +9,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class ExpenseQueryServiceImpl implements ExpenseQueryService {
+public class DefaultExpenseQueryService implements ExpenseQueryService {
 
     private final ExpenseRepository expenseRepository;
 
-    public ExpenseQueryServiceImpl(final ExpenseRepository expenseRepository) {
+    public DefaultExpenseQueryService(final ExpenseRepository expenseRepository) {
         this.expenseRepository = expenseRepository;
     }
 

@@ -2,17 +2,21 @@ package org.creatorledger.user.application
 
 import org.creatorledger.user.domain.Email
 import org.creatorledger.user.domain.User
+import org.creatorledger.user.domain.UserRegistered
 import org.creatorledger.user.api.UserId
+import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 
 class UserApplicationServiceSpec extends Specification {
 
     UserRepository userRepository
+    ApplicationEventPublisher eventPublisher
     UserApplicationService service
 
     def setup() {
         userRepository = Mock(UserRepository)
-        service = new UserApplicationService(userRepository)
+        eventPublisher = Mock(ApplicationEventPublisher)
+        service = new UserApplicationService(userRepository, eventPublisher)
     }
 
     def "should register a new user"() {
@@ -31,6 +35,25 @@ class UserApplicationServiceSpec extends Specification {
 
         and: "the user ID is returned"
         userId != null
+    }
+
+    def "should publish UserRegistered event when registering user"() {
+        given: "a register user command"
+        def command = new RegisterUserCommand("user@example.com")
+
+        when: "registering the user"
+        service.register(command)
+
+        then: "the user is saved"
+        1 * userRepository.save(_) >> { User user -> user }
+
+        and: "UserRegistered event is published"
+        1 * eventPublisher.publishEvent(_) >> { arguments ->
+            def event = arguments[0]
+            assert event instanceof UserRegistered
+            assert event.email().value() == "user@example.com"
+            assert event.occurredAt() != null
+        }
     }
 
     def "should reject null command"() {

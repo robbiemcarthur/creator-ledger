@@ -2,19 +2,24 @@ package org.creatorledger.event.application
 
 import org.creatorledger.event.domain.ClientName
 import org.creatorledger.event.domain.Event
+import org.creatorledger.event.domain.EventCreated
 import org.creatorledger.event.domain.EventDate
+import org.creatorledger.event.domain.EventUpdated
 import org.creatorledger.event.api.EventId
+import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 import java.time.LocalDate
 
 class EventApplicationServiceSpec extends Specification {
 
     EventRepository eventRepository
+    ApplicationEventPublisher eventPublisher
     EventApplicationService service
 
     def setup() {
         eventRepository = Mock(EventRepository)
-        service = new EventApplicationService(eventRepository)
+        eventPublisher = Mock(ApplicationEventPublisher)
+        service = new EventApplicationService(eventRepository, eventPublisher)
     }
 
     def "should create a new event"() {
@@ -39,6 +44,30 @@ class EventApplicationServiceSpec extends Specification {
 
         and: "the event ID is returned"
         eventId != null
+    }
+
+    def "should publish EventCreated event when creating event"() {
+        given: "a create event command"
+        def command = new CreateEventCommand(
+            LocalDate.of(2026, 3, 15),
+            "Acme Corporation",
+            "Website redesign workshop"
+        )
+
+        when: "creating the event"
+        service.create(command)
+
+        then: "the event is saved"
+        1 * eventRepository.save(_) >> { Event event -> event }
+
+        and: "EventCreated event is published"
+        1 * eventPublisher.publishEvent(_) >> { arguments ->
+            def event = arguments[0]
+            assert event instanceof EventCreated
+            assert event.clientName().value() == "Acme Corporation"
+            assert event.description() == "Website redesign workshop"
+            assert event.occurredAt() != null
+        }
     }
 
     def "should reject null command when creating"() {
@@ -81,6 +110,44 @@ class EventApplicationServiceSpec extends Specification {
             assert event.clientName() == ClientName.of("Beta Industries")
             assert event.description() == "Updated description"
             return event
+        }
+    }
+
+    def "should publish EventUpdated event when updating event"() {
+        given: "an existing event"
+        def eventId = EventId.generate()
+        def existingEvent = Event.create(
+            eventId,
+            EventDate.of(LocalDate.of(2026, 3, 15)),
+            ClientName.of("Acme Corporation"),
+            "Original description"
+        )
+
+        and: "repository returns the existing event"
+        eventRepository.findById(eventId) >> Optional.of(existingEvent)
+
+        and: "an update command"
+        def command = new UpdateEventCommand(
+            eventId,
+            LocalDate.of(2026, 4, 20),
+            "Beta Industries",
+            "Updated description"
+        )
+
+        when: "updating the event"
+        service.update(command)
+
+        then: "the event is saved"
+        1 * eventRepository.save(_) >> { Event event -> event }
+
+        and: "EventUpdated event is published"
+        1 * eventPublisher.publishEvent(_) >> { arguments ->
+            def event = arguments[0]
+            assert event instanceof EventUpdated
+            assert event.eventId() == eventId
+            assert event.clientName().value() == "Beta Industries"
+            assert event.description() == "Updated description"
+            assert event.occurredAt() != null
         }
     }
 

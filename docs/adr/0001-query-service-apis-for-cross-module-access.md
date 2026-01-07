@@ -77,7 +77,7 @@ public record IncomeData(
 package org.creatorledger.income.application;
 
 @Service
-public class IncomeQueryServiceImpl implements IncomeQueryService {
+public class DefaultIncomeQueryService implements IncomeQueryService {
     private final IncomeRepository incomeRepository;
 
     @Override

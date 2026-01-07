@@ -3,6 +3,8 @@ package org.creatorledger.expense.application;
 import org.creatorledger.common.Money;
 import org.creatorledger.expense.api.ExpenseId;
 import org.creatorledger.expense.domain.Expense;
+import org.creatorledger.expense.domain.ExpenseRecorded;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,9 +14,17 @@ import java.util.Optional;
 public class ExpenseApplicationService {
 
     private final ExpenseRepository expenseRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public ExpenseApplicationService(final ExpenseRepository expenseRepository) {
+    public ExpenseApplicationService(final ExpenseRepository expenseRepository, final ApplicationEventPublisher eventPublisher) {
+        if (expenseRepository == null) {
+            throw new IllegalArgumentException("Expense repository cannot be null");
+        }
+        if (eventPublisher == null) {
+            throw new IllegalArgumentException("Event publisher cannot be null");
+        }
         this.expenseRepository = expenseRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public ExpenseId record(final RecordExpenseCommand command) {
@@ -32,6 +42,18 @@ public class ExpenseApplicationService {
         );
 
         expenseRepository.save(expense);
+
+        // Publish domain event
+        final ExpenseRecorded event = ExpenseRecorded.of(
+            expense.id(),
+            expense.userId(),
+            expense.amount(),
+            expense.category(),
+            expense.description(),
+            expense.incurredDate()
+        );
+        eventPublisher.publishEvent(event);
+
         return expense.id();
     }
 

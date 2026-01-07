@@ -136,6 +136,16 @@ The goal is to produce **simple, expressive, predictable, domain‑focused code*
 - Static methods are fine for pure functions.
 - Static mutable state is forbidden.
 
+## **5.4 Class Naming Conventions**
+- **Never use the "Impl" suffix** — it reveals nothing about the implementation.
+- Use intention‑revealing names that describe the implementation strategy:
+  - `DefaultUserService` — the standard implementation
+  - `JpaUserRepository` — JPA‑based persistence
+  - `InMemoryUserRepository` — in‑memory testing implementation
+  - `CachedUserRepository` — caching decorator
+- Choose names that communicate **how** the class fulfills its contract.
+- Follow established patterns in the codebase (e.g., `Jpa*` for repositories).
+
 ---
 
 # **6. Methods**

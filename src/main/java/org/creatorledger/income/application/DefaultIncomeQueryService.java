@@ -9,11 +9,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class IncomeQueryServiceImpl implements IncomeQueryService {
+public class DefaultIncomeQueryService implements IncomeQueryService {
 
     private final IncomeRepository incomeRepository;
 
-    public IncomeQueryServiceImpl(final IncomeRepository incomeRepository) {
+    public DefaultIncomeQueryService(final IncomeRepository incomeRepository) {
         this.incomeRepository = incomeRepository;
     }
 

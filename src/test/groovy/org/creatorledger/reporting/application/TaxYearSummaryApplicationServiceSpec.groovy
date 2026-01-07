@@ -10,7 +10,9 @@ import org.creatorledger.income.api.IncomeData
 import org.creatorledger.income.api.IncomeQueryService
 import org.creatorledger.income.domain.Income
 import org.creatorledger.reporting.domain.TaxYear
+import org.creatorledger.reporting.domain.TaxYearSummaryGenerated
 import org.creatorledger.user.api.UserId
+import org.springframework.context.ApplicationEventPublisher
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -20,16 +22,19 @@ class TaxYearSummaryApplicationServiceSpec extends Specification {
     IncomeQueryService incomeQueryService
     ExpenseQueryService expenseQueryService
     TaxYearSummaryRepository taxYearSummaryRepository
+    ApplicationEventPublisher eventPublisher
     TaxYearSummaryApplicationService service
 
     def setup() {
         incomeQueryService = Mock(IncomeQueryService)
         expenseQueryService = Mock(ExpenseQueryService)
         taxYearSummaryRepository = Mock(TaxYearSummaryRepository)
+        eventPublisher = Mock(ApplicationEventPublisher)
         service = new TaxYearSummaryApplicationService(
                 incomeQueryService,
                 expenseQueryService,
-                taxYearSummaryRepository
+                taxYearSummaryRepository,
+                eventPublisher
         )
     }
 
@@ -65,6 +70,39 @@ class TaxYearSummaryApplicationServiceSpec extends Specification {
             return summary
         }
         summaryId != null
+    }
+
+    def "should publish TaxYearSummaryGenerated event when generating summary"() {
+        given: "a user and tax year"
+        def userId = UserId.generate()
+        def taxYear = TaxYear.of(2025)
+        def command = new GenerateTaxYearSummaryCommand(userId, taxYear)
+
+        and: "some income for the tax year"
+        def income = IncomeData.from(Income.record(userId, EventId.generate(), Money.gbp("1000.00"), "Project", LocalDate.of(2025, 5, 1)))
+        incomeQueryService.findByUserIdAndDateRange(userId, taxYear.startDate(), taxYear.endDate()) >> [income]
+
+        and: "some expenses for the tax year"
+        def expense = ExpenseData.from(Expense.record(userId, Money.gbp("300.00"), ExpenseCategory.EQUIPMENT, "Laptop", LocalDate.of(2025, 6, 1)))
+        expenseQueryService.findByUserIdAndDateRange(userId, taxYear.startDate(), taxYear.endDate()) >> [expense]
+
+        when: "generating the summary"
+        service.generate(command)
+
+        then: "the summary is saved"
+        1 * taxYearSummaryRepository.save(_) >> { args -> args[0] }
+
+        and: "TaxYearSummaryGenerated event is published"
+        1 * eventPublisher.publishEvent(_) >> { arguments ->
+            def event = arguments[0]
+            assert event instanceof TaxYearSummaryGenerated
+            assert event.userId() == userId
+            assert event.taxYear() == taxYear
+            assert event.totalIncome() == Money.gbp("1000.00")
+            assert event.totalExpenses() == Money.gbp("300.00")
+            assert event.profit() == Money.gbp("700.00")
+            assert event.occurredAt() != null
+        }
     }
 
     def "should generate summary with zero income"() {

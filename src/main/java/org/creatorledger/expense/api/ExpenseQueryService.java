@@ -14,14 +14,5 @@ import java.util.List;
  * </p>
  */
 public interface ExpenseQueryService {
-
-    /**
-     * Find all expense records for a user within a date range.
-     *
-     * @param userId the user ID
-     * @param startDate the start date (inclusive)
-     * @param endDate the end date (inclusive)
-     * @return list of expense data
-     */
     List<ExpenseData> findByUserIdAndDateRange(UserId userId, LocalDate startDate, LocalDate endDate);
 }

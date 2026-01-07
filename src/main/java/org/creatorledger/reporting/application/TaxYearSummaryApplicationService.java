@@ -9,8 +9,11 @@ import org.creatorledger.income.api.IncomeQueryService;
 import org.creatorledger.reporting.api.TaxYearSummaryId;
 import org.creatorledger.reporting.domain.CategoryTotals;
 import org.creatorledger.reporting.domain.TaxYearSummary;
+import org.creatorledger.reporting.domain.TaxYearSummaryGenerated;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,15 +25,30 @@ public class TaxYearSummaryApplicationService {
     private final IncomeQueryService incomeQueryService;
     private final ExpenseQueryService expenseQueryService;
     private final TaxYearSummaryRepository taxYearSummaryRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public TaxYearSummaryApplicationService(
             final IncomeQueryService incomeQueryService,
             final ExpenseQueryService expenseQueryService,
-            final TaxYearSummaryRepository taxYearSummaryRepository
+            final TaxYearSummaryRepository taxYearSummaryRepository,
+            final ApplicationEventPublisher eventPublisher
     ) {
+        if (incomeQueryService == null) {
+            throw new IllegalArgumentException("Income query service cannot be null");
+        }
+        if (expenseQueryService == null) {
+            throw new IllegalArgumentException("Expense query service cannot be null");
+        }
+        if (taxYearSummaryRepository == null) {
+            throw new IllegalArgumentException("Tax year summary repository cannot be null");
+        }
+        if (eventPublisher == null) {
+            throw new IllegalArgumentException("Event publisher cannot be null");
+        }
         this.incomeQueryService = incomeQueryService;
         this.expenseQueryService = expenseQueryService;
         this.taxYearSummaryRepository = taxYearSummaryRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public TaxYearSummaryId generate(final GenerateTaxYearSummaryCommand command) {
@@ -63,6 +81,20 @@ public class TaxYearSummaryApplicationService {
         );
 
         taxYearSummaryRepository.save(summary);
+
+        // Publish domain event
+        final TaxYearSummaryGenerated event = new TaxYearSummaryGenerated(
+            summary.id(),
+            summary.userId(),
+            summary.taxYear(),
+            summary.totalIncome(),
+            summary.totalExpenses(),
+            summary.profit(),
+            summary.categoryTotals(),
+            Instant.now()
+        );
+        eventPublisher.publishEvent(event);
+
         return summary.id();
     }
 
